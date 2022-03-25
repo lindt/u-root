@@ -276,7 +276,7 @@ func TestGetTime(t *testing.T) {
 			wantDay:   22,
 			wantHour:  4,
 			wantMin:   05,
-			wantSec:   time.Now().Second(),
+			wantSec:   0,
 			location:  time.Local,
 		},
 		{
@@ -287,7 +287,7 @@ func TestGetTime(t *testing.T) {
 			wantDay:   22,
 			wantHour:  4,
 			wantMin:   05,
-			wantSec:   time.Now().Second(),
+			wantSec:   0,
 			location:  time.Local,
 		},
 		{
@@ -309,7 +309,7 @@ func TestGetTime(t *testing.T) {
 			wantDay:   22,
 			wantHour:  4,
 			wantMin:   5,
-			wantSec:   time.Now().Second(),
+			wantSec:   0,
 			location:  time.Local,
 		},
 		{
@@ -347,6 +347,12 @@ func TestGetTime(t *testing.T) {
 				if !strings.Contains(err.Error(), tt.wantErr) {
 					t.Errorf("%q failed. Got: %q, Want: %q", tt.name, err, tt.wantErr)
 				}
+			}
+			// Tests which don't dictate the seconds for the date require to be Now().Sencond(). This is flaky, because there is a chance that
+			// if the second is determined in the struct definition tt.wantSec = time.Now().Second() and test execution is a second later.
+			// To avoid this we hardcode the expected second. This is not nice, but an interface would be overkill I think.
+			if tt.wantSec == 0 {
+				tt.wantSec = testTime.Second()
 			}
 			compareTime := time.Date(tt.wantYear, time.Month(tt.wantMonth), tt.wantDay, tt.wantHour, tt.wantMin, tt.wantSec, tt.wantNsec, tt.location).String()
 			if err == nil && !strings.Contains(compareTime, testTime.String()) {
