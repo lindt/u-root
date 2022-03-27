@@ -1,4 +1,4 @@
-module github.com/u-root/u-root
+module github.com/lindt/u-root
 
 go 1.17
 
