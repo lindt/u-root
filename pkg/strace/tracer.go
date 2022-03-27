@@ -216,6 +216,8 @@ func Trace(c *exec.Cmd, recordCallback ...EventCallback) error {
 		unix.PTRACE_O_TRACESYSGOOD|
 			// Kill tracee if tracer exits.
 			unix.PTRACE_O_EXITKILL|
+			// trace exec
+			unix.PTRACE_O_TRACEEXEC|
 			// Automatically trace fork(2)'d, clone(2)'d, and vfork(2)'d children.
 			unix.PTRACE_O_TRACECLONE|unix.PTRACE_O_TRACEFORK|unix.PTRACE_O_TRACEVFORK); err != nil {
 		return &TraceError{
